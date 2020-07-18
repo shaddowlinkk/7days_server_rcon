@@ -20,6 +20,10 @@ public class PlayerListHandler {
         model.addElement(line);
 
     }
+    public void removeElement(String line){
+        line=line.substring(1,line.length()-2);
+        model.removeElementAt(model.indexOf(line));
+    }
     private void populateList(){
         for (int i =0;i<data.size();i++) {
             if (data.get(i).contains("deaths=")) {

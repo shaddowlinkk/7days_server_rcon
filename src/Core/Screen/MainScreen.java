@@ -26,8 +26,8 @@ public class MainScreen extends JFrame {
         list= playerlist.getList();
         playerlist.addData(ns_Servers.getData());
         list= playerlist.getList();
-
         serverInfo =new ServerInfoScreen(ns_Servers.getServerInfo(),ns_Servers.getIn());
+        serverInfo.setPl(playerlist);
         com.setWriter(ns_Servers.getOutStream());
         JPanel info = serverInfo.getScrolling();
 
