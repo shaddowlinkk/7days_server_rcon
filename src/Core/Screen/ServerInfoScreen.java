@@ -4,41 +4,66 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.SocketException;
 
-public class ServerInfoScreen extends JTextArea {
+public class ServerInfoScreen extends JTextArea implements Runnable {
     BufferedReader output;
-    public ServerInfoScreen(BufferedReader in){
+    InputStream in;
+    JScrollPane pane;
+    int i =1;
+    public ServerInfoScreen(BufferedReader in, InputStream st){
+        this.in=st;
         output=in;
         setBackground(Color.white);
-        setSize(960,400);
+        setSize(1460,400);
         //setPreferredSize(new Dimension(940,400));
         setLocation(0,0);
         setVisible(true);
         setEditable(false);
         setLineWrap(true);
+        setBackground(Color.black);
+        setForeground(Color.green);
     }
     public JPanel getScrolling(){
         JPanel out = new JPanel();
         out.setVisible(true);
-        JScrollPane pane =  new JScrollPane(this);
+        out.setBorder(BorderFactory.createTitledBorder("Server Info"));
+        pane =  new JScrollPane(this);
         pane.setLocation(0,0);
         pane.setVisible(true);
         pane.setPreferredSize(new Dimension(this.getWidth()+20,this.getHeight()));
         pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         out.add(pane);
-        out.setSize(this.getWidth()+20,this.getHeight()+5);
+        out.setSize(this.getWidth()+20,this.getHeight()+20);
 
         return out;
     }
-    public void refresh(){
-        try {
-            append(output.readLine()+"\n");
 
-        } catch (SocketException en){
-            System.out.println("server stoped");
-        } catch (IOException e) {
-            e.printStackTrace();
+
+    //todo move to another class
+    @Override
+    public void run()  {
+        while (true) {
+            try {
+                //if (in.available()>0) {
+                    try {
+                        String tmp = output.readLine() + "\n";
+                        if (!tmp.contains("by Telnet from")){
+                            append(tmp);
+                            selectAll();
+                            //setCaretPosition(getCaretPosition() + tmp.length());
+                            }
+                    } catch (SocketException en) {
+                        System.out.println("server stoped");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                //}
+                Thread.sleep(1);
+            } catch (InterruptedException en){
+
+            }
         }
     }
 }
