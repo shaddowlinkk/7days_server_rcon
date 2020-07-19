@@ -28,7 +28,7 @@ public class PlayerListHandler {
         for (int i =0;i<data.size();i++) {
             if (data.get(i).contains("deaths=")) {
                 String[] j = data.get(i).split(",");
-                addElement(j[1]);
+                addElement(j[1].trim());
             }
         }
     }

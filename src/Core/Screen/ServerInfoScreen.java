@@ -55,17 +55,15 @@ public class ServerInfoScreen extends JTextArea implements Runnable {
                     try {
                         String tmp = output.readLine() + "\n";
                         if(tmp.contains("INF Player connected")){
-                            //System.out.println(tmp.split(",")[2].split("=")[1]);
                             pl.addElement(tmp.split(",")[2].split("=")[1]);
                         }
                         if(tmp.contains("INF Player disconnected")){
-                            //System.out.println(tmp.split(",")[2].split("=")[1]);
                             pl.removeElement(tmp.split(",")[3].split("=")[1]);
                         }
                         if (!tmp.contains("by Telnet from")){
                             append(tmp);
-                            selectAll();
-                            //setCaretPosition(getCaretPosition() + tmp.length());
+                            //selectAll();
+                            setCaretPosition(getCaretPosition() + tmp.length());
                             }
                     } catch (SocketException en) {
                         System.out.println("server stoped");
