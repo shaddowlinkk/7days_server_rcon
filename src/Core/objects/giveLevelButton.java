@@ -32,13 +32,12 @@ public class giveLevelButton extends JButton {
             //add ban command
             int level = Integer.parseInt(JOptionPane.showInputDialog("Enter level"));
             long i= getxp(level);
-            System.out.println(i);
             writer.println("bm-givexp "+list.getSelectedValue()+" "+getxp(level));
 
         }
     }
     private long getxp(int lvl){
-        if(lvl==0){
+        if(lvl==1){
             return 0;
         }else if(lvl>=60){
             return ((10000*(Math.round((Math.pow(1.05,60)))))+getxp(lvl-1));

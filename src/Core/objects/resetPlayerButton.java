@@ -13,7 +13,7 @@ public class resetPlayerButton extends JButton {
     public resetPlayerButton(){
         setText("Reset Player");
         setVisible(true);
-        setSize(125,25);
+        setSize(125 ,25);
         addActionListener(new BanAction());
     }
 
