@@ -36,41 +36,42 @@ public class MainScreen extends JFrame {
     private resetPlayerButton resetPlayer = new resetPlayerButton();
     private giveLevelButton givexp = new giveLevelButton();
 
+    private String username;
     private static int workload = 12;
     private boolean auth= false;
     private int power=-1;
 
-    public MainScreen(){
+    public MainScreen() {
         //setting up server conection
         setVisible(false);
-        int result = JOptionPane.showConfirmDialog(this,"Do you want to register", "New User",
+        int result = JOptionPane.showConfirmDialog(this, "Do you want to register", "New User",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if(result == JOptionPane.YES_OPTION){
+        if (result == JOptionPane.YES_OPTION) {
             register(this);
-            JOptionPane.showMessageDialog(this,"You have registered an account please contact lead technical support\n to get the account activated");
+            JOptionPane.showMessageDialog(this, "You have registered an account please contact lead technical support\n to get the account activated");
             System.exit(0);
-        }else{
-            for (int i =0;i<3;i++){
-                auth=login(this);
-                if(auth){
+        } else {
+            for (int i = 0; i < 3; i++) {
+                auth = login(this);
+                if (auth) {
                     break;
                 }
             }
-            if(!auth){
+            if (!auth) {
                 System.exit(0);
             }
-            if(power<0){
-                JOptionPane.showMessageDialog(this, "please contact lead tech support to get you account activated");
+            if (power < 0) {
+                JOptionPane.showMessageDialog(this, "please contact lead tech support to get your account activated");
                 System.exit(0);
             }
         }
         ns_Servers = new ServerConection();
         ns_Servers.starting();
-        list= playerlist.getList();
+        list = playerlist.getList();
         playerlist.addData(ns_Servers.getData());
-        list= playerlist.getList();
-        serverInfo =new ServerInfoScreen(ns_Servers.getServerInfo(),ns_Servers.getIn());
+        list = playerlist.getList();
+        serverInfo = new ServerInfoScreen(ns_Servers.getServerInfo(), ns_Servers.getIn());
         serverInfo.setPl(playerlist);
         com.setWriter(ns_Servers.getOutStream());
         ban.setWriter(ns_Servers.getOutStream());
@@ -89,23 +90,24 @@ public class MainScreen extends JFrame {
         //jfram settings
         this.addWindowListener(new closelistener());
         this.setVisible(true);
-        this.setSize(1600,1000);
+        this.setSize(1600, 1000);
         this.setLayout(null);
         this.setTitle("NSTech server Rcon");
 
         //elements in frame and thare settings
-        info.setLocation(20,40);
-        com.setLocation(20,470);
+        info.setLocation(20, 40);
+        com.setLocation(20, 470);
         list.setLocation(830, 470);
-        ban.setLocation(1100,470);
-        resetPlayer.setLocation(1200,470);
-        givexp.setLocation(1350,470);
-
-        add(givexp);
-        add(resetPlayer);
-        add(ban);
+        ban.setLocation(1100, 470);
+        resetPlayer.setLocation(1200, 470);
+        givexp.setLocation(1350, 470);
+        if (power < 1&& !(power<0)){
+            add(givexp);
+            add(resetPlayer);
+            add(ban);
+            add(com);
+        }
         add(list);
-        add(com);
         add(info);
 
         //end of file stuff
@@ -200,6 +202,7 @@ public class MainScreen extends JFrame {
 
         return(hashed_password);
     }
+
 
 
 
