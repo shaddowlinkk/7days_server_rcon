@@ -29,7 +29,6 @@ public class giveLevelButton extends JButton {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //add ban command
             int level = Integer.parseInt(JOptionPane.showInputDialog("Enter level"));
             long i= getxp(level);
             writer.println("bm-givexp "+list.getSelectedValue()+" "+getxp(level));

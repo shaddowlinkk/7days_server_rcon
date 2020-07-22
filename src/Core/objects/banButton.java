@@ -1,6 +1,7 @@
 package Core.objects;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -30,7 +31,11 @@ public class banButton extends JButton {
         @Override
         public void actionPerformed(ActionEvent e) {
             //add ban command
-            writer.println("say \"clicked to ban"+list.getSelectedValue()+"\"");
+            Frame f = new Frame();
+            int re = JOptionPane.showConfirmDialog(f,"Are you sure");
+            if(re==JOptionPane.YES_OPTION) {
+                writer.println("ban add " + list.getSelectedValue()+" 999 years "+JOptionPane.showInputDialog(f,"Enter reason"));
+            }
         }
     }
 }

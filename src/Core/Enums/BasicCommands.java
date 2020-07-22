@@ -2,6 +2,9 @@ package Core.Enums;
 
 public enum BasicCommands {
     ban(0),
+    say(1),
+    help(2),
+    lp(2),
     admin(0);
     int power;
     BasicCommands(int power){

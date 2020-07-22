@@ -28,7 +28,7 @@ public class MainScreen extends JFrame {
     private DataBaseCon dataBase;
     private ServerConection ns_Servers ;
     private ServerInfoScreen serverInfo ;
-    private CommandObjects com = new CommandObjects();
+    private CommandObjects com ;
     private PlayerListHandler playerlist  = new PlayerListHandler();
     private PlayerlistObject list;
     private Thread server;
@@ -66,6 +66,7 @@ public class MainScreen extends JFrame {
                 System.exit(0);
             }
         }
+        com= new CommandObjects(power);
         ns_Servers = new ServerConection();
         ns_Servers.starting();
         list = playerlist.getList();
@@ -101,7 +102,7 @@ public class MainScreen extends JFrame {
         ban.setLocation(1100, 470);
         resetPlayer.setLocation(1200, 470);
         givexp.setLocation(1350, 470);
-        if (power < 1&& !(power<0)){
+        if (power < 3 && power>=0){
             add(givexp);
             add(resetPlayer);
             add(ban);
@@ -136,7 +137,13 @@ public class MainScreen extends JFrame {
         if (i==JOptionPane.OK_OPTION){
             try {
                 dataBase = new DataBaseCon();
-                dataBase.RegisterUser(username.getText(),hashPassword(new String(password.getPassword())));
+                if(dataBase.exists(username.getText())){
+                    JOptionPane.showMessageDialog(this,"That user already exist");
+                    register(this);
+                    return;
+                }else {
+                    dataBase.RegisterUser(username.getText(), hashPassword(new String(password.getPassword())));
+                }
             } catch (SQLException throwables) {
 
             }
@@ -196,6 +203,7 @@ public class MainScreen extends JFrame {
 
         return(password_verified);
     }
+
     public static String hashPassword(String password_plaintext) {
         String salt = BCrypt.gensalt(workload);
         String hashed_password = BCrypt.hashpw(password_plaintext, salt);

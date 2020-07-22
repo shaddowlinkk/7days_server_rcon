@@ -17,6 +17,13 @@ public class DataBaseCon {
         return result.getString("pass");
 
     }
+    public boolean exists(String user) throws SQLException {
+        String[] out = new String[0];
+        Statement statement = con.createStatement();
+        ResultSet result = statement.executeQuery("SELECT * FROM users WHERE user='"+user+"'");
+        return (result.next());
+
+    }
     public int getPower(String user) throws SQLException {
         Statement statement = con.createStatement();
         ResultSet result = statement.executeQuery("SELECT * FROM users WHERE user='"+user+"'");
