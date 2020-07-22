@@ -17,12 +17,13 @@ public class ServerConection {
     private BufferedReader out;
     private PrintWriter writer;
     private InputStream in;
+    private Socket server;
     ArrayList<String> data = new ArrayList<>();
     public ServerConection(){
         try {
             DataBaseCon baseCon = new DataBaseCon();
             byte[][] info = baseCon.getServerinfo("wildmount");
-            Socket server = new Socket(decryptPass(info[0]), 26939);
+            server = new Socket(decryptPass(info[0]), 26939);
             InputStream input = server.getInputStream();
             OutputStream output = server.getOutputStream();
             BufferedReader readers = new BufferedReader(new InputStreamReader(input));
@@ -31,7 +32,7 @@ public class ServerConection {
             writer.println(decryptPass(info[1]));
             line = readers.readLine();
             while (!line.contains("successful")){
-                writer.println(decryptPass(info[2]));
+                writer.println(decryptPass(info[1]));
                 line = readers.readLine();
             }
             out=readers;
@@ -50,6 +51,13 @@ public class ServerConection {
     }
     public InputStream getIn() {
         return in;
+    }
+    public void close(){
+        try {
+            server.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ArrayList<String> getData() {

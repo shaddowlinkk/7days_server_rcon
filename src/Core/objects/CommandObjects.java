@@ -14,7 +14,9 @@ public class CommandObjects extends JTextField {
     private Thread Server;
     private JTextArea screen;
     private int power;
-    public CommandObjects(int power){
+    private String name;
+    public CommandObjects(int power,String name){
+        this.name=name;
         this.power=power;
         setVisible(true);
         setSize(800,25);
@@ -41,11 +43,19 @@ public class CommandObjects extends JTextField {
          String command = (temp.split(" ").length>1)? temp.split(" ")[0]:temp;
          try {
              if (isInEnum(command, BasicCommands.class) || isInEnum(command.split("-")[1], BotmanCommands.class)) {
-                 if (power<=BasicCommands.valueOf(command).getPower()){
-                     writer.println(temp);
-                 }else {
-                     JFrame f = new JFrame();
-                     JOptionPane.showMessageDialog(f,"You do not have permission to run that command");
+                 try {
+                     if (power <= BasicCommands.valueOf(command).getPower()) {
+                         if(command.equals("say")){
+                             String ne = temp.split(" ")[0]+" \"<"+name+">"+temp.substring(5,temp.length()-1)+"\"";
+                             temp = ne;
+                         }
+                         writer.println(temp);
+                     } else {
+                         JFrame f = new JFrame();
+                         JOptionPane.showMessageDialog(f, "You do not have permission to run that command");
+                     }
+                 }catch (IllegalArgumentException en){
+
                  }
                  if(BotmanCommands.valueOf(command.split("-")[1]).getPower()>=power){
                      writer.println(temp);

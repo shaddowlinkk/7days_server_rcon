@@ -66,7 +66,7 @@ public class MainScreen extends JFrame {
                 System.exit(0);
             }
         }
-        com= new CommandObjects(power);
+        com= new CommandObjects(power,username);
         ns_Servers = new ServerConection();
         ns_Servers.starting();
         list = playerlist.getList();
@@ -93,6 +93,7 @@ public class MainScreen extends JFrame {
         this.setVisible(true);
         this.setSize(1600, 1000);
         this.setLayout(null);
+        this.setResizable(false);
         this.setTitle("NSTech server Rcon");
 
         //elements in frame and thare settings
@@ -103,8 +104,10 @@ public class MainScreen extends JFrame {
         resetPlayer.setLocation(1200, 470);
         givexp.setLocation(1350, 470);
         if (power < 3 && power>=0){
-            add(givexp);
-            add(resetPlayer);
+            if(power < 2 && power>=0) {
+                add(givexp);
+                add(resetPlayer);
+            }
             add(ban);
             add(com);
         }
@@ -175,6 +178,7 @@ public class MainScreen extends JFrame {
         int i = JOptionPane.showConfirmDialog(frame, panel, "login", JOptionPane.OK_CANCEL_OPTION);
 
         //authentication
+        this.username=username.getText();
         if (i==JOptionPane.OK_OPTION){
             String auth = null;
             try {
@@ -224,6 +228,8 @@ public class MainScreen extends JFrame {
         @Override
         public void windowClosing(WindowEvent e) {
             server.stop();
+            ns_Servers.getOutStream().println("exit");
+            ns_Servers.close();
             System.exit(0);
         }
 
