@@ -46,7 +46,7 @@ public class CommandObjects extends JTextField {
                  try {
                      if (power <= BasicCommands.valueOf(command).getPower()) {
                          if(command.equals("say")){
-                             String ne = temp.split(" ")[0]+" \"<"+name+">"+temp.substring(5,temp.length()-1)+"\"";
+                             String ne = temp.split(" ")[0]+" \"<"+name+"> "+temp.substring(5,temp.length()-1)+"\"";
                              temp = ne;
                          }
                          writer.println(temp);
