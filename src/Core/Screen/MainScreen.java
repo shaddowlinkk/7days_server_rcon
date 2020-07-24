@@ -186,6 +186,7 @@ public class MainScreen extends JFrame {
                 auth = dataBase.getAuth(username.getText());
                 power=dataBase.getPower(username.getText());
             } catch (SQLException throwables) {
+                JOptionPane.showMessageDialog(this,"Failed to connect to SQL server please contact tech support");
                 System.out.println("Problem with that SQL Server Connection");
             }
             this.password=new String(password.getPassword());

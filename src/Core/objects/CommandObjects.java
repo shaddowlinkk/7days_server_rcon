@@ -2,12 +2,14 @@ package Core.objects;
 
 import Core.Enums.BasicCommands;
 import Core.Enums.BotmanCommands;
+import Core.Util.DataBaseCon;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 public class CommandObjects extends JTextField {
     private PrintWriter writer;
@@ -42,13 +44,20 @@ public class CommandObjects extends JTextField {
          setText("");
          String command = (temp.split(" ").length>1)? temp.split(" ")[0]:temp;
          try {
+             DataBaseCon con = new DataBaseCon();
              if (isInEnum(command, BasicCommands.class) || isInEnum(command.split("-")[1], BotmanCommands.class)) {
                  try {
                      if (power <= BasicCommands.valueOf(command).getPower()) {
                          if(command.equals("say")){
-                             String ne = temp.split(" ")[0]+" \"<"+name+"> "+temp.substring(5,temp.length()-1)+"\"";
-                             temp = ne;
+                             if(temp.contains("\"")) {
+                                 String ne = temp.split(" ")[0] + " \"<" + name + "> " + temp.substring(5, temp.length() - 1) + "\"";
+                                 temp = ne;
+                             }else {
+                                 String ne = temp.split(" ")[0] + " \"<" + name + "> " + temp+ "\"";
+                                 temp = ne;
+                             }
                          }
+                         con.LogUseage(name,temp);
                          writer.println(temp);
                      } else {
                          JFrame f = new JFrame();
@@ -58,6 +67,7 @@ public class CommandObjects extends JTextField {
 
                  }
                  if(BotmanCommands.valueOf(command.split("-")[1]).getPower()>=power){
+                     con.LogUseage(name,temp);
                      writer.println(temp);
                  }else {
                      JFrame f = new JFrame();
@@ -66,6 +76,8 @@ public class CommandObjects extends JTextField {
              }
          }catch (ArrayIndexOutOfBoundsException en){
 
+         } catch (SQLException throwables) {
+             throwables.printStackTrace();
          }
      }
  }

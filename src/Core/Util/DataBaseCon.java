@@ -37,7 +37,14 @@ public class DataBaseCon {
         preparedStatement.setString(2,pass);
         preparedStatement.executeUpdate();
     }
-    public byte[][] getServerinfo(String serverName){
+
+    public void LogUseage(String user, String pass) throws SQLException {
+        PreparedStatement preparedStatement = con.prepareStatement("INSERT INTO `logging`(`user`,`command`)VALUES (?,?)");
+        preparedStatement.setString(1,user);
+        preparedStatement.setString(2,pass);
+        preparedStatement.executeUpdate();
+    }
+/*    public byte[][] getServerinfo(String serverName){
         byte[][] info = new byte[2][];
         try {
             Statement statement = con.createStatement();
@@ -49,5 +56,5 @@ public class DataBaseCon {
             throwables.printStackTrace();
         }
         return info;
-    }
+    }*/
 }
