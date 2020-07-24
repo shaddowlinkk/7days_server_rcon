@@ -62,8 +62,8 @@ public class ServerInfoScreen extends JTextArea implements Runnable {
                         }
                         if (!tmp.contains("by Telnet from")){
                             append(tmp);
-                            selectAll();
-                            //setCaretPosition(getCaretPosition() + tmp.length());
+                            //selectAll();
+                            setCaretPosition(getCaretPosition() + tmp.length());
                             }
                     } catch (SocketException en) {
                         System.out.println("server stoped");

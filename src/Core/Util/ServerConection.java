@@ -1,6 +1,7 @@
 package Core.Util;
 
 import Core.Exceptions.AuthenticationFailed;
+import Core.Exceptions.ConnectionFailed;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -26,12 +27,10 @@ public class ServerConection {
             Authclinet client = new Authclinet();
             try {
                 client.Connection(username,password,hash,servername);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }catch (EOFException en){
+            } catch (ConnectionFailed connectionFailed) {
+                System.out.println("connection failed");
                 throw new AuthenticationFailed();
             }
-
             server = new Socket(client.getIp(), 26939);
             InputStream input = server.getInputStream();
             OutputStream output = server.getOutputStream();
@@ -86,6 +85,8 @@ public class ServerConection {
             }
         }catch (IOException e){
 
+        }catch (NullPointerException e){
+            System.out.println("could not start the player list");
         }
     }
 }

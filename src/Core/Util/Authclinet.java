@@ -1,5 +1,6 @@
 package Core.Util;
 
+import Core.Exceptions.ConnectionFailed;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.crypto.BadPaddingException;
@@ -7,9 +8,11 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -20,17 +23,24 @@ public class Authclinet {
     private  String hash;
     private byte[] ip;
     private byte[] pass;
-    public  void Connection(String username, String password, String hash,  String server) throws IOException, ClassNotFoundException {
-        Socket client = new Socket("127.0.0.1",8888);
-        ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
-        ObjectInputStream in = in = new ObjectInputStream(client.getInputStream());
-        this.hash=hash;
-        out.writeObject(encryptPass(username));
-        out.writeObject(encryptPass(password));
-        out.writeObject(server);
-        out.writeObject(hash);
-        ip=(byte[]) in.readObject();
-        pass=(byte[]) in.readObject();
+    public  void Connection(String username, String password, String hash,  String server) throws ConnectionFailed {
+        try {
+            Socket client = new Socket("127.0.0.1", 8888);
+            ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+            ObjectInputStream in = in = new ObjectInputStream(client.getInputStream());
+            this.hash = hash;
+            out.writeObject(encryptPass(username));
+            out.writeObject(encryptPass(password));
+            out.writeObject(server);
+            out.writeObject(hash);
+            ip = (byte[]) in.readObject();
+            pass = (byte[]) in.readObject();
+        }catch (IOException e){
+            throw new ConnectionFailed();
+
+        }catch (ClassNotFoundException e) {
+            throw new ConnectionFailed();
+        }
     }
 
     public String getIp() {

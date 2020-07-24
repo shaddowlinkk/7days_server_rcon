@@ -66,6 +66,7 @@ public class MainScreen extends JFrame {
             ns_Servers = new ServerConection(username,password,hash,servername);
         } catch (AuthenticationFailed authenticationFailed) {
             JOptionPane.showMessageDialog(this,"Authentication has Failed please contact tech support");
+            System.exit(0);
         }
         ns_Servers.starting();
         list = playerlist.getList();
@@ -185,10 +186,10 @@ public class MainScreen extends JFrame {
                 auth = dataBase.getAuth(username.getText());
                 power=dataBase.getPower(username.getText());
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                System.out.println("Problem with that SQL Server Connection");
             }
             this.password=new String(password.getPassword());
-            this.hash=auth;
+            this.hash=hashPassword(this.password);
             this.servername="wildmount";
             return checkPassword(new String(password.getPassword()), auth);
         }else {
