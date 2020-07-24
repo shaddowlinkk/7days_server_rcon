@@ -66,7 +66,6 @@ public class ServerConection {
             e.printStackTrace();
         }
     }
-
     public ArrayList<String> getData() {
         return data;
     }
@@ -88,26 +87,5 @@ public class ServerConection {
         }catch (IOException e){
 
         }
-    }
-    public String decryptPass(byte[] pass){
-        String temp = null;
-        try {
-            KeyFile key = new KeyFile();
-            Key aesKey = new SecretKeySpec(key.getKey(),"AES");
-            Cipher cipher = Cipher.getInstance("AES");
-            cipher.init(Cipher.DECRYPT_MODE,aesKey);
-            temp= new String(cipher.doFinal(pass));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        return temp;
     }
 }

@@ -24,13 +24,13 @@ public class Authclinet {
         Socket client = new Socket("127.0.0.1",8888);
         ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
         ObjectInputStream in = in = new ObjectInputStream(client.getInputStream());
+        this.hash=hash;
         out.writeObject(encryptPass(username));
         out.writeObject(encryptPass(password));
         out.writeObject(server);
         out.writeObject(hash);
         ip=(byte[]) in.readObject();
         pass=(byte[]) in.readObject();
-
     }
 
     public String getIp() {
