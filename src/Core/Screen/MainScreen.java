@@ -1,5 +1,6 @@
 package Core.Screen;
 
+import Core.Exceptions.AuthenticationFailed;
 import Core.Handlers.PlayerListHandler;
 import Core.Util.DataBaseCon;
 import Core.Util.ServerConection;
@@ -8,21 +9,15 @@ import Core.objects.PlayerlistObject;
 import Core.objects.banButton;
 import Core.objects.resetPlayerButton;
 import Core.objects.giveLevelButton;
-import org.mindrot.jbcrypt.BCrypt;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
+
+import org.mindrot.jbcrypt.BCrypt;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
 import java.sql.SQLException;
-import java.util.Hashtable;
+
 
 public class MainScreen extends JFrame {
     private DataBaseCon dataBase;
@@ -36,7 +31,7 @@ public class MainScreen extends JFrame {
     private resetPlayerButton resetPlayer = new resetPlayerButton();
     private giveLevelButton givexp = new giveLevelButton();
 
-    private String username;
+    private String username, password, hash ,servername;
     private static int workload = 12;
     private boolean auth= false;
     private int power=-1;
@@ -67,7 +62,11 @@ public class MainScreen extends JFrame {
             }
         }
         com= new CommandObjects(power,username);
-        ns_Servers = new ServerConection();
+        try {
+            ns_Servers = new ServerConection(username,password,hash,servername);
+        } catch (AuthenticationFailed authenticationFailed) {
+            JOptionPane.showMessageDialog(this,"Authentication has Failed please contact tech support");
+        }
         ns_Servers.starting();
         list = playerlist.getList();
         playerlist.addData(ns_Servers.getData());
@@ -188,7 +187,9 @@ public class MainScreen extends JFrame {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-
+            this.password=new String(password.getPassword());
+            this.hash=auth;
+            this.servername="wildmount";
             return checkPassword(new String(password.getPassword()), auth);
         }else {
             System.exit(0);

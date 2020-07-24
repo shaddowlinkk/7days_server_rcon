@@ -22,7 +22,11 @@ public class PlayerListHandler {
     }
     public void removeElement(String line){
         line=line.substring(1,line.length()-2);
-        model.removeElementAt(model.indexOf(line));
+        try {
+            model.removeElementAt(model.indexOf(line));
+        }catch (IndexOutOfBoundsException e){
+
+        }
     }
     private void populateList(){
         for (int i =0;i<data.size();i++) {

@@ -1,5 +1,7 @@
 package Core.Util;
 
+import Core.Exceptions.AuthenticationFailed;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -19,28 +21,33 @@ public class ServerConection {
     private InputStream in;
     private Socket server;
     ArrayList<String> data = new ArrayList<>();
-    public ServerConection(){
+    public ServerConection(String username, String password, String hash,  String servername) throws AuthenticationFailed {
         try {
-            DataBaseCon baseCon = new DataBaseCon();
-            byte[][] info = baseCon.getServerinfo("wildmount");
-            server = new Socket(decryptPass(info[0]), 26939);
+            Authclinet client = new Authclinet();
+            try {
+                client.Connection(username,password,hash,servername);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }catch (EOFException en){
+                throw new AuthenticationFailed();
+            }
+
+            server = new Socket(client.getIp(), 26939);
             InputStream input = server.getInputStream();
             OutputStream output = server.getOutputStream();
             BufferedReader readers = new BufferedReader(new InputStreamReader(input));
             String line = readers.readLine();
             writer = new PrintWriter(output, true);
-            writer.println(decryptPass(info[1]));
+            writer.println(client.getPass());
             line = readers.readLine();
             while (!line.contains("successful")){
-                writer.println(decryptPass(info[1]));
+                writer.println(client.getPass());
                 line = readers.readLine();
             }
             out=readers;
             in=input;
         }catch (IOException e){
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
     }
     public BufferedReader getServerInfo(){
