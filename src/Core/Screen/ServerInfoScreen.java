@@ -15,6 +15,12 @@ public class ServerInfoScreen extends JTextArea implements Runnable {
     JScrollPane pane;
     PlayerListHandler pl;
     int i =1;
+    private static final String zeroTo255
+            = "([01]?[0-9]{1,2}|2[0-4][0-9]|25[0-5])";
+
+    private static final String IP_REGEXP
+            = zeroTo255 + "\\." + zeroTo255 + "\\."
+            + zeroTo255 + "\\." + zeroTo255;
     public ServerInfoScreen(BufferedReader in, InputStream st){
         this.in=st;
         output=in;
@@ -61,6 +67,7 @@ public class ServerInfoScreen extends JTextArea implements Runnable {
                             pl.removeElement(tmp.split(",")[3].split("=")[1]);
                         }
                         if (!tmp.contains("by Telnet from")){
+                            tmp =tmp.replaceAll(IP_REGEXP,"IP REMOVED");
                             append(tmp);
                             //selectAll();
                             setCaretPosition(getCaretPosition() + tmp.length());

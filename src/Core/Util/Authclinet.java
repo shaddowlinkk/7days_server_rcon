@@ -25,7 +25,7 @@ public class Authclinet {
     private byte[] pass;
     public  void Connection(String username, String password, String hash,  String server) throws ConnectionFailed {
         try {
-            Socket client = new Socket("127.0.0.1", 8888);
+            Socket client = new Socket("73.212.150.220", 8888);
             ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
             ObjectInputStream in = in = new ObjectInputStream(client.getInputStream());
             this.hash = hash;

@@ -70,7 +70,7 @@ public class ServerConection {
     }
     public void starting(){
         try {
-
+            System.out.println("Starting");
             String line = "";
             while (!line.contains("end session")) {
                 line = out.readLine();
