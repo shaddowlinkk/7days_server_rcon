@@ -2,6 +2,7 @@ package Core.Screen;
 
 import Core.Exceptions.AuthenticationFailed;
 import Core.Handlers.PlayerListHandler;
+import Core.Threads.PowerCheckThread;
 import Core.Util.DataBaseCon;
 import Core.Util.ServerConection;
 import Core.objects.CommandObjects;
@@ -115,6 +116,8 @@ public class MainScreen extends JFrame {
         add(info);
 
         //end of file stuff
+        PowerCheckThread check = new PowerCheckThread(username);
+        check.start();
         setVisible(true);
         revalidate();
         repaint();
